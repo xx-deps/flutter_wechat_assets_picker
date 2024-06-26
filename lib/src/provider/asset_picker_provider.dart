@@ -353,10 +353,21 @@ class DefaultAssetPickerProvider
       options = fog;
     }
 
-    final List<AssetPathEntity> list = await PhotoManager.getAssetPathList(
+    List<AssetPathEntity> list = await PhotoManager.getAssetPathList(
       type: requestType,
       filterOption: options,
     );
+    final Map nameMap = {
+      'recent': '最近',
+      'camera': '相机',
+      'screenshots': '截图',
+      'pictures': '图片',
+      'video': '视频'
+    };
+
+    list = list
+        .map((e) => e.copyWith(name: nameMap[e.name.toLowerCase()] ?? e.name))
+        .toList();
 
     _paths = list
         .map((AssetPathEntity p) => PathWrapper<AssetPathEntity>(path: p))
